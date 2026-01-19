@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { LogOut, User } from 'lucide-react';
+import Logo from './Logo';
 
 const Header = ({ title }) => {
     const { signOut, user } = useAuth();
@@ -23,7 +24,7 @@ const Header = ({ title }) => {
         }}>
             <div className="container" style={{ margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
                 <div>
-                    <h1 style={{ fontSize: '1.25rem', color: 'var(--primary-color)', margin: 0 }}>{title || 'Cuidar+'}</h1>
+                    <Logo size={18} />
                     {user && <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Olá, {user.email?.split('@')[0]}</span>}
                 </div>
                 <button

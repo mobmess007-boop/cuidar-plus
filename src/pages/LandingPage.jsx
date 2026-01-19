@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Heart, Shield, Bell, Smartphone, ArrowRight, CheckCircle2 } from 'lucide-react';
+import Logo from '../components/Logo';
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -28,10 +29,7 @@ const LandingPage = () => {
                 maxWidth: '1200px',
                 margin: '0 auto'
             }}>
-                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--primary-color)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Heart fill="var(--primary-color)" />
-                    Cuidar+
-                </div>
+                <Logo />
                 <button
                     onClick={() => navigate(user ? '/dashboard' : '/login')}
                     style={{ background: 'transparent', border: 'none', fontWeight: '600', color: 'var(--text-secondary)' }}

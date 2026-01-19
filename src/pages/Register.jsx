@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Pill } from 'lucide-react';
+import Logo from '../components/Logo';
 
 const Register = () => {
     const [fullName, setFullName] = useState('');
@@ -59,22 +60,11 @@ const Register = () => {
                 width: '100%',
                 maxWidth: '400px'
             }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                    <Logo size={32} />
+                </div>
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <div style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '64px',
-                        height: '64px',
-                        backgroundColor: '#EFF6FF',
-                        borderRadius: '50%',
-                        color: '#2563EB',
-                        marginBottom: '1rem'
-                    }}>
-                        <Pill size={32} />
-                    </div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1F2937' }}>Criar Conta</h2>
-                    <p style={{ color: '#6B7280' }}>Comece a cuidar da sua saúde</p>
+                    <p style={{ color: '#6B7280', margin: 0 }}>Comece a cuidar da sua saúde</p>
                 </div>
 
                 {error && (

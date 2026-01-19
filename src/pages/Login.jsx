@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Pill } from 'lucide-react';
+import Logo from '../components/Logo';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -44,22 +45,11 @@ const Login = () => {
                 width: '100%',
                 maxWidth: '400px'
             }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                    <Logo size={32} />
+                </div>
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <div style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '64px',
-                        height: '64px',
-                        backgroundColor: '#EFF6FF',
-                        borderRadius: '50%',
-                        color: '#2563EB',
-                        marginBottom: '1rem'
-                    }}>
-                        <Pill size={32} />
-                    </div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1F2937' }}>Cuidar+</h2>
-                    <p style={{ color: '#6B7280' }}>Bem-vindo de volta</p>
+                    <p style={{ color: '#6B7280', margin: 0 }}>Bem-vindo de volta</p>
                 </div>
 
                 {error && (
