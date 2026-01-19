@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Heart, Shield, Bell, Smartphone, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const LandingPage = () => {
     const navigate = useNavigate();
