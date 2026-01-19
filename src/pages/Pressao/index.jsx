@@ -11,7 +11,7 @@ import BPChart from './BPChart';
 const Pressao = () => {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const { user, isPremium } = useAuth();
     const navigate = useNavigate();
 
     const fetchLogs = useCallback(async () => {
@@ -47,21 +47,65 @@ const Pressao = () => {
             <div style={{ marginBottom: '1.5rem' }}>
                 <button
                     className="btn-primary"
-                    onClick={() => navigate('/pressao/adicionar')}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                    onClick={() => {
+                        if (!isPremium && logs.length >= 5) {
+                            alert('Limite da versão gratuita atingido (5 registros). Faça o upgrade para Premium para adicionar medições ilimitadas!');
+                            return;
+                        }
+                        navigate('/pressao/adicionar');
+                    }}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        opacity: (!isPremium && logs.length >= 5) ? 0.7 : 1
+                    }}
                 >
                     <Plus size={20} />
                     Nova Medição
                 </button>
+                {!isPremium && logs.length >= 5 && (
+                    <p style={{ color: 'var(--secondary-color)', fontSize: '0.875rem', marginTop: '0.5rem', fontWeight: '500' }}>
+                        Limite de 5 registros atingido na versão gratuita.
+                    </p>
+                )}
             </div>
 
             {/* Chart Section */}
             {logs.length > 0 && (
                 <div className="card">
-                    <h3 style={{ marginBottom: '1rem', fontSize: '1.125rem' }}>Evolução</h3>
-                    <div style={{ height: '300px', width: '100%' }}>
-                        <BPChart data={logs} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                        <h3 style={{ margin: 0, fontSize: '1.125rem' }}>Evolução</h3>
+                        {!isPremium && (
+                            <span style={{ fontSize: '0.75rem', background: 'var(--primary-color)', color: 'white', padding: '2px 8px', borderRadius: '12px', fontWeight: 'bold' }}>
+                                PREMIUM
+                            </span>
+                        )}
                     </div>
+                    {isPremium ? (
+                        <div style={{ height: '300px', width: '100%' }}>
+                            <BPChart data={logs} />
+                        </div>
+                    ) : (
+                        <div style={{
+                            height: '200px',
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#F3F4F6',
+                            borderRadius: '12px',
+                            textAlign: 'center',
+                            padding: '1rem'
+                        }}>
+                            <Activity size={32} style={{ color: 'var(--text-light)', marginBottom: '0.5rem', opacity: 0.5 }} />
+                            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: 0 }}>
+                                Gráficos de evolução estão disponíveis apenas na <strong>Versão Premium</strong>.
+                            </p>
+                        </div>
+                    )}
                 </div>
             )}
 

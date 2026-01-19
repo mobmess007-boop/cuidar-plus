@@ -8,7 +8,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const Medicamentos = () => {
     const [meds, setMeds] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const { user, isPremium } = useAuth();
     const navigate = useNavigate();
 
     const fetchMeds = useCallback(async () => {
@@ -50,12 +50,29 @@ const Medicamentos = () => {
             <div style={{ marginBottom: '1.5rem' }}>
                 <button
                     className="btn-primary"
-                    onClick={() => navigate('/medicamentos/adicionar')}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
+                    onClick={() => {
+                        if (!isPremium && meds.length >= 3) {
+                            alert('Limite da versão gratuita atingido (3 medicamentos). Faça o upgrade para Premium para cadastrar quantos quiser!');
+                            return;
+                        }
+                        navigate('/medicamentos/adicionar');
+                    }}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        opacity: (!isPremium && meds.length >= 3) ? 0.7 : 1
+                    }}
                 >
                     <Plus size={20} />
                     Novo Medicamento
                 </button>
+                {!isPremium && meds.length >= 3 && (
+                    <p style={{ color: 'var(--secondary-color)', fontSize: '0.875rem', marginTop: '0.5rem', fontWeight: '500' }}>
+                        Limite de 3 medicamentos atingido na versão gratuita.
+                    </p>
+                )}
             </div>
 
             {loading ? (

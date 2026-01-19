@@ -32,3 +32,20 @@ No painel da Vercel, adicione as seguintes variáveis em **Settings > Environmen
 ### Configuração de Roteamento
 
 O roteamento SPA já está configurado via `vercel.json`.
+
+## 🔄 Como Atualizar o App
+
+Sempre que você ou eu fizermos uma alteração no código para corrigir algo ou adicionar uma função, basta rodar estes comandos no terminal:
+
+```bash
+# 1. Adiciona as mudanças
+git add .
+
+# 2. Salva as mudanças com uma descrição
+git commit -m "descrição da mudança"
+
+# 3. Envia para o GitHub (A Vercel atualizará o site automaticamente!)
+git push
+```
+
+A Vercel detecta o novo código no GitHub e faz o deploy da nova versão em instantes.
