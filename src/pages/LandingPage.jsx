@@ -128,11 +128,31 @@ const LandingPage = () => {
             </section>
 
             {/* Social Proof / Pricing */}
-            <section style={{ padding: '6rem 1.5rem', background: '#111827', color: 'white', borderRadius: '40px', margin: '0 1.5rem 4rem' }}>
+            <section id="pricing" style={{ padding: '6rem 1.5rem', background: '#111827', color: 'white', borderRadius: '40px', margin: '0 1.5rem 4rem' }}>
                 <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-                    <h2 style={{ fontSize: '3rem', marginBottom: '2rem' }}>Acesso Vitalício</h2>
-                    <div style={{ fontSize: '4rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-                        R$ 97<span style={{ fontSize: '1.5rem', opacity: '0.6' }}>,90</span>
+                    <div style={{
+                        display: 'inline-block',
+                        padding: '0.4rem 1rem',
+                        background: 'var(--secondary-color)',
+                        borderRadius: '20px',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
+                        marginBottom: '1.5rem',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                    }}>
+                        🚀 Oferta Especial de Lançamento
+                    </div>
+                    <h2 style={{ fontSize: '3rem', marginBottom: '1rem' }}>Acesso Vitalício</h2>
+                    <p style={{ opacity: '0.8', fontSize: '1.125rem', marginBottom: '2rem', color: '#9CA3AF' }}>
+                        Para os primeiros 100 usuários
+                    </p>
+
+                    <div style={{ marginBottom: '0.5rem', textDecoration: 'line-through', opacity: '0.5', fontSize: '1.25rem' }}>
+                        De R$ 197,00
+                    </div>
+                    <div style={{ fontSize: '4.5rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'white' }}>
+                        R$ 97<span style={{ fontSize: '1.5rem', opacity: '0.8' }}>,90</span>
                     </div>
                     <p style={{ opacity: '0.6', marginBottom: '3rem' }}>Pagamento único. Sem mensalidades.</p>
 
