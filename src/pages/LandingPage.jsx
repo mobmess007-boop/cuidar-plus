@@ -1,9 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Shield, Bell, Smartphone, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const LandingPage = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const handleBuy = () => {
         // Here we would link to the Kiwify checkout
@@ -31,10 +32,10 @@ const LandingPage = () => {
                     Cuidar+
                 </div>
                 <button
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate(user ? '/dashboard' : '/login')}
                     style={{ background: 'transparent', border: 'none', fontWeight: '600', color: 'var(--text-secondary)' }}
                 >
-                    Entrar
+                    {user ? 'Ir para o Painel' : 'Entrar'}
                 </button>
             </nav>
 

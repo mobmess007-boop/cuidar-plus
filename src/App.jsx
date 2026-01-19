@@ -19,13 +19,13 @@ function App() {
       <AuthProvider>
         <Routes>
           {/* Public Routes */}
-          <Route path="/home" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/medicamentos" element={<Medicamentos />} />
             <Route path="/medicamentos/adicionar" element={<AdicionarMedicamento />} />
             <Route path="/pressao" element={<Pressao />} />
