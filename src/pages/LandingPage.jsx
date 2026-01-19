@@ -6,7 +6,7 @@ import Logo from '../components/Logo';
 
 const LandingPage = () => {
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, isPremium } = useAuth();
 
     const handleBuy = () => {
         // Here we would link to the Kiwify checkout
@@ -66,13 +66,36 @@ const LandingPage = () => {
                         O aplicativo mais simples e seguro para controlar medicamentos, pressão e diabetes. Feito pensando em quem precisa de clareza e facilidade.
                     </p>
                     <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        {(!user || !isPremium) && (
+                            <button
+                                onClick={handleBuy}
+                                className="btn-primary"
+                                style={{ width: 'auto', padding: '1rem 2rem', fontSize: '1.125rem' }}
+                            >
+                                {user ? 'Upgrade para Premium' : 'Garanta seu Acesso Vitalício'}
+                                <ArrowRight size={20} />
+                            </button>
+                        )}
+
                         <button
-                            onClick={handleBuy}
-                            className="btn-primary"
-                            style={{ width: 'auto', padding: '1rem 2rem', fontSize: '1.125rem' }}
+                            onClick={() => navigate(user ? '/dashboard' : '/register')}
+                            style={{
+                                width: 'auto',
+                                padding: '1rem 2rem',
+                                fontSize: '1.125rem',
+                                background: 'white',
+                                color: 'var(--primary-color)',
+                                border: '2px solid var(--primary-color)',
+                                borderRadius: '12px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}
                         >
-                            Garanta seu Acesso Vitalício
-                            <ArrowRight size={20} />
+                            {user ? 'Ir para o meu Painel' : 'Testar Versão Grátis'}
                         </button>
                     </div>
                 </div>
