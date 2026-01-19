@@ -9,8 +9,20 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check active session
-        const getSession = async () => {
+        const fetchProfile = async (userId) => {
+            try {
+                const { data } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', userId)
+                    .single();
+                if (data) setProfile(data);
+            } catch (err) {
+                console.error('Error fetching profile:', err);
+            }
+        };
+
+        const initializeAuth = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.user) {
                 setUser(session.user);
@@ -19,23 +31,15 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         };
 
-        const fetchProfile = async (userId) => {
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', userId)
-                .single();
+        initializeAuth();
 
-            if (data) setProfile(data);
-        };
-
-        getSession();
-
-        // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             if (session?.user) {
                 setUser(session.user);
-                await fetchProfile(session.user.id);
+                // Only refetch if session user changes or it's a login event
+                if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+                    await fetchProfile(session.user.id);
+                }
             } else {
                 setUser(null);
                 setProfile(null);

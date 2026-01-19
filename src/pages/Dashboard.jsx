@@ -33,7 +33,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <button
-                        onClick={() => navigate('/home')}
+                        onClick={() => navigate('/')}
                         style={{
                             background: 'white',
                             color: '#6366F1',
