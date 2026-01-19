@@ -1,0 +1,198 @@
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { Pill } from 'lucide-react';
+
+const Register = () => {
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const { signUp } = useAuth();
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (password !== confirmPassword) {
+            return setError('As senhas não coincidem');
+        }
+
+        try {
+            setError('');
+            setLoading(true);
+            const { error } = await signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: fullName
+                    }
+                }
+            });
+            if (error) throw error;
+            alert('Cadastro realizado! Por favor, faça login.');
+            navigate('/login');
+        } catch (err) {
+            setError('Falha no cadastro. ' + err.message);
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'var(--bg-color)',
+            padding: '20px'
+        }}>
+            <div style={{
+                backgroundColor: 'white',
+                padding: '2rem',
+                borderRadius: '16px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                width: '100%',
+                maxWidth: '400px'
+            }}>
+                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '64px',
+                        height: '64px',
+                        backgroundColor: '#EFF6FF',
+                        borderRadius: '50%',
+                        color: '#2563EB',
+                        marginBottom: '1rem'
+                    }}>
+                        <Pill size={32} />
+                    </div>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1F2937' }}>Criar Conta</h2>
+                    <p style={{ color: '#6B7280' }}>Comece a cuidar da sua saúde</p>
+                </div>
+
+                {error && (
+                    <div style={{
+                        backgroundColor: '#FEF2F2',
+                        color: '#991B1B',
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        marginBottom: '1rem',
+                        fontSize: '0.875rem'
+                    }}>
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                            Nome Completo
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            placeholder="Seu nome"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: '8px',
+                                border: '1px solid #D1D5DB',
+                                fontSize: '1rem'
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: '8px',
+                                border: '1px solid #D1D5DB',
+                                fontSize: '1rem'
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                            Senha
+                        </label>
+                        <input
+                            type="password"
+                            required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: '8px',
+                                border: '1px solid #D1D5DB',
+                                fontSize: '1rem'
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
+                            Confirmar Senha
+                        </label>
+                        <input
+                            type="password"
+                            required
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: '8px',
+                                border: '1px solid #D1D5DB',
+                                fontSize: '1rem'
+                            }}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        style={{
+                            width: '100%',
+                            padding: '0.875rem',
+                            backgroundColor: '#2563EB',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '1rem',
+                            fontWeight: '600',
+                            cursor: loading ? 'not-allowed' : 'pointer',
+                            opacity: loading ? 0.7 : 1
+                        }}
+                    >
+                        {loading ? 'Cadastrar' : 'Criar Conta'}
+                    </button>
+                </form>
+
+                <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.875rem', color: '#6B7280' }}>
+                    Já tem uma conta?{' '}
+                    <Link to="/login" style={{ color: '#2563EB', textDecoration: 'none', fontWeight: '500' }}>
+                        Entrar
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Register;
