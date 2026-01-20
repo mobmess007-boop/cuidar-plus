@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Pill } from 'lucide-react';
+import { Pill, Eye, EyeOff } from 'lucide-react';
 import Logo from '../components/Logo';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { signIn } = useAuth();
@@ -21,8 +22,12 @@ const Login = () => {
             if (error) throw error;
             navigate('/dashboard');
         } catch (err) {
-            setError('Falha no login. Verifique suas credenciais.');
             console.error(err);
+            if (err.message?.includes('Email not confirmed')) {
+                setError('Por favor, confirme seu e-mail para entrar. Verifique seu inbox e a pasta de spam.');
+            } else {
+                setError('Falha no login. Verifique suas credenciais.');
+            }
         } finally {
             setLoading(false);
         }
@@ -88,19 +93,41 @@ const Login = () => {
                         <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', color: '#374151', marginBottom: '0.5rem' }}>
                             Senha
                         </label>
-                        <input
-                            type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            style={{
-                                width: '100%',
-                                padding: '0.75rem',
-                                borderRadius: '8px',
-                                border: '1px solid #D1D5DB',
-                                fontSize: '1rem'
-                            }}
-                        />
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem',
+                                    paddingRight: '2.5rem',
+                                    borderRadius: '8px',
+                                    border: '1px solid #D1D5DB',
+                                    fontSize: '1rem'
+                                }}
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: 'absolute',
+                                    right: '0.75rem',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#6B7280',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: 0
+                                }}
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
                     </div>
                     <button
                         type="submit"

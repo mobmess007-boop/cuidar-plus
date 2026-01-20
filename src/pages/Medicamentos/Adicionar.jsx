@@ -37,7 +37,7 @@ const AdicionarMedicamento = () => {
             if (error) throw error;
             navigate('/medicamentos');
         } catch (error) {
-            console.error('Error adding med:', error);
+            console.error('Erro ao adicionar medicamento:', error);
             alert('Erro ao salvar medicamento. Tente novamente.');
         } finally {
             setLoading(false);

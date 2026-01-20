@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
                     .single();
                 if (data) setProfile(data);
             } catch (err) {
-                console.error('Error fetching profile:', err);
+                console.error('Erro ao buscar perfil:', err);
             }
         };
 

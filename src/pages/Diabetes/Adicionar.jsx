@@ -37,7 +37,7 @@ const AdicionarDiabetes = () => {
             if (error) throw error;
             navigate('/diabetes');
         } catch (error) {
-            console.error('Error adding glucose log:', error);
+            console.error('Erro ao adicionar registro de glicemia:', error);
             alert('Erro ao salvar registro. Tente novamente.');
         } finally {
             setLoading(false);

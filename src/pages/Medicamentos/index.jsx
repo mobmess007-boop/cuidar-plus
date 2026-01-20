@@ -23,7 +23,7 @@ const Medicamentos = () => {
             if (error) throw error;
             setMeds(data);
         } catch (error) {
-            console.error('Error fetching meds:', error.message);
+            console.error('Erro ao buscar medicamentos:', error.message);
         } finally {
             setLoading(false);
         }
@@ -40,7 +40,7 @@ const Medicamentos = () => {
             if (error) throw error;
             setMeds(meds.filter(m => m.id !== id));
         } catch (error) {
-            console.error('Error deleting med:', error);
+            console.error('Erro ao excluir medicamento:', error);
             alert('Erro ao excluir.');
         }
     };

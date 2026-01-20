@@ -39,7 +39,7 @@ const AdicionarPressao = () => {
             if (error) throw error;
             navigate('/pressao');
         } catch (error) {
-            console.error('Error adding BP log:', error);
+            console.error('Erro ao adicionar registro de pressão:', error);
             alert('Erro ao salvar registro. Tente novamente.');
         } finally {
             setLoading(false);

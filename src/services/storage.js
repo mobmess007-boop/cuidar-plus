@@ -9,7 +9,7 @@ export const getStoredData = (key) => {
         const item = localStorage.getItem(key);
         return item ? JSON.parse(item) : [];
     } catch (error) {
-        console.error('Error reading from storage', error);
+        console.error('Erro ao ler do armazenamento', error);
         return [];
     }
 };
@@ -18,7 +18,7 @@ export const saveData = (key, data) => {
     try {
         localStorage.setItem(key, JSON.stringify(data));
     } catch (error) {
-        console.error('Error saving to storage', error);
+        console.error('Erro ao salvar no armazenamento', error);
     }
 };
 

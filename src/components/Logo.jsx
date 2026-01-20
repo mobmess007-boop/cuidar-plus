@@ -1,5 +1,5 @@
 import React from 'react';
-import { HeartPulse } from 'lucide-react';
+import { Zap } from 'lucide-react';
 
 const Logo = ({ size = 24, showText = true, color = 'var(--primary-color)' }) => {
     return (
@@ -19,9 +19,9 @@ const Logo = ({ size = 24, showText = true, color = 'var(--primary-color)' }) =>
                 height: size * 1.5,
                 backgroundColor: '#EFF6FF',
                 borderRadius: '12px',
-                color: color
+                color: 'var(--secondary-color)'
             }}>
-                <HeartPulse size={size} strokeWidth={2.5} />
+                <Zap size={size} strokeWidth={2.5} fill="currentColor" />
             </div>
             {showText && <span style={{ letterSpacing: '-0.02em' }}>Cuidar<span style={{ color: 'var(--secondary-color)' }}>+</span></span>}
         </div>

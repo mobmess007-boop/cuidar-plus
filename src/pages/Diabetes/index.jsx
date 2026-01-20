@@ -26,7 +26,7 @@ const Diabetes = () => {
             if (error) throw error;
             setLogs(data);
         } catch (error) {
-            console.error('Error fetching glucose logs:', error.message);
+            console.error('Erro ao buscar registros de glicemia:', error.message);
         } finally {
             setLoading(false);
         }

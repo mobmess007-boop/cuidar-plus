@@ -26,7 +26,7 @@ const Pressao = () => {
             if (error) throw error;
             setLogs(data);
         } catch (error) {
-            console.error('Error fetching BP logs:', error.message);
+            console.error('Erro ao buscar registros de pressão:', error.message);
         } finally {
             setLoading(false);
         }
