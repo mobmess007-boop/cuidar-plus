@@ -7,7 +7,17 @@ import { Crown, Star, ArrowRight, Activity, Pill, Droplet } from 'lucide-react';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const { isPremium, user } = useAuth();
+    const { isPremium, user, loading } = useAuth();
+
+    if (loading) {
+        return (
+            <Layout>
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                    <p style={{ color: 'var(--text-secondary)' }}>Carregando dados...</p>
+                </div>
+            </Layout>
+        );
+    }
 
     return (
         <Layout>
