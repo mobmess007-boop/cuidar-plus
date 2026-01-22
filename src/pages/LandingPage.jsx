@@ -72,7 +72,7 @@ const LandingPage = () => {
                                 className="btn-primary"
                                 style={{ width: 'auto', padding: '1rem 2rem', fontSize: '1.125rem' }}
                             >
-                                {user ? 'Upgrade para Premium' : 'Garanta seu Acesso Vitalício'}
+                                {user ? 'Upgrade para Premium' : 'Garantir meu Acesso Vitalício'}
                                 <ArrowRight size={20} />
                             </button>
                         )}
@@ -95,7 +95,7 @@ const LandingPage = () => {
                                 gap: '0.5rem'
                             }}
                         >
-                            {user ? 'Ir para o meu Painel' : 'Testar Versão Grátis'}
+                            {user ? 'Ir para o meu Painel' : 'Começar grátis agora'}
                         </button>
                     </div>
                 </div>
@@ -168,7 +168,7 @@ const LandingPage = () => {
                         className="btn-primary"
                         style={{ background: '#FFF', color: '#000', padding: '1.25rem 2.5rem', fontSize: '1.25rem' }}
                     >
-                        Quero Cuidar da Minha Saúde agora
+                        Sim! Quero mais saúde e tranquilidade
                     </button>
                 </div>
             </section>

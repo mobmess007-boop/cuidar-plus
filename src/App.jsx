@@ -12,6 +12,7 @@ import AdicionarDiabetes from './pages/Diabetes/Adicionar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import LandingPage from './pages/LandingPage';
+import Success from './pages/Success';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/sucesso" element={<Success />} />
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>

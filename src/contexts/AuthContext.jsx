@@ -8,52 +8,80 @@ export const AuthProvider = ({ children }) => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchProfile = async (userId) => {
-            try {
-                const { data } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', userId)
-                    .single();
-                if (data) setProfile(data);
-            } catch (err) {
-                console.error('Erro ao buscar perfil:', err);
-            }
-        };
-
-        const initializeAuth = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session?.user) {
-                setUser(session.user);
-                await fetchProfile(session.user.id);
-            }
+    const fetchProfile = async (userId) => {
+        if (!userId) {
             setLoading(false);
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', userId)
+                .single();
+
+            if (error) throw error;
+            if (data) setProfile(data);
+        } catch (err) {
+            console.error('Erro ao buscar perfil:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        // Safety timeout: Never stay loading longer than 6 seconds
+        const timeout = setTimeout(() => {
+            setLoading(prev => {
+                if (prev) console.warn('Auth loading timeout!');
+                return false;
+            });
+        }, 6000);
+
+        const initialize = async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session?.user) {
+                    setUser(session.user);
+                    await fetchProfile(session.user.id);
+                } else {
+                    setUser(null);
+                    setProfile(null);
+                    setLoading(false);
+                }
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
+                setLoading(false);
+            }
         };
 
-        initializeAuth();
+        initialize();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             if (session?.user) {
                 setUser(session.user);
-                // Only refetch if session user changes or it's a login event
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
                     await fetchProfile(session.user.id);
                 }
             } else {
                 setUser(null);
                 setProfile(null);
+                setLoading(false);
             }
-            setLoading(false);
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            clearTimeout(timeout);
+            subscription.unsubscribe();
+        };
     }, []);
 
     const value = {
         signUp: (data) => supabase.auth.signUp(data),
         signIn: (data) => supabase.auth.signInWithPassword(data),
         signOut: () => supabase.auth.signOut(),
+        refreshProfile: () => user && fetchProfile(user.id),
         user,
         profile,
         isPremium: profile?.is_premium || false,
