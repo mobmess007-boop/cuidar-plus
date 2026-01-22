@@ -71,11 +71,35 @@ export const AuthProvider = ({ children }) => {
             }
         });
 
+        // Real-time subscription for profile changes
+        let profileSubscription = null;
+        if (user?.id) {
+            profileSubscription = supabase
+                .channel('profile-changes')
+                .on(
+                    'postgres_changes',
+                    {
+                        event: 'UPDATE',
+                        schema: 'public',
+                        table: 'profiles',
+                        filter: `id=eq.${user.id}`
+                    },
+                    (payload) => {
+                        console.log('Perfil atualizado em tempo real:', payload.new);
+                        setProfile(payload.new);
+                    }
+                )
+                .subscribe();
+        }
+
         return () => {
             clearTimeout(timeout);
             subscription.unsubscribe();
+            if (profileSubscription) {
+                profileSubscription.unsubscribe();
+            }
         };
-    }, []);
+    }, [user?.id]);
 
     const value = {
         signUp: (data) => supabase.auth.signUp(data),

@@ -21,7 +21,8 @@ const Dashboard = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '1rem',
-                    boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.3)'
+                    boxShadow: '0 10px 15px -3px rgba(99, 102, 241, 0.3)',
+                    transition: 'all 0.3s ease'
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <div style={{ background: 'rgba(255,255,255,0.2)', padding: '8px', borderRadius: '12px' }}>
