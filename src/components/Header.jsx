@@ -9,8 +9,13 @@ const Header = ({ title }) => {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        await signOut();
-        navigate('/login');
+        try {
+            await signOut();
+        } catch (error) {
+            console.error('Erro ao sair:', error);
+        } finally {
+            navigate('/login');
+        }
     };
 
     return (

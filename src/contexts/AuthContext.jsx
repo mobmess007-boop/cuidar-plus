@@ -9,10 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const fetchProfile = async (userId) => {
-        if (!userId) {
-            setLoading(false);
-            return;
-        }
+        if (!userId) return;
 
         try {
             const { data, error } = await supabase
@@ -21,88 +18,80 @@ export const AuthProvider = ({ children }) => {
                 .eq('id', userId)
                 .single();
 
-            if (error) {
-                // If profile doesn't exist yet, it might be creation race condition
-                console.warn('Perfil não encontrado ou erro:', error.message);
-                if (error.code === 'PGRST116') { // no rows
-                    // Optional: retry once or wait
-                }
+            if (error && error.code !== 'PGRST116') {
+                console.error('Erro profile:', error);
             }
-            if (data) setProfile(data);
+
+            if (data) {
+                console.log('Perfil carregado:', data);
+                setProfile(data);
+            }
         } catch (err) {
-            console.error('Erro ao buscar perfil:', err);
-        } finally {
-            setLoading(false);
+            console.error('Erro fetchProfile:', err);
         }
     };
 
     useEffect(() => {
-        // 1. Initial Session Check
+        let mounted = true;
+
         const initialize = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
-                if (session?.user) {
-                    setUser(session.user);
-                    await fetchProfile(session.user.id);
-                } else {
-                    setUser(null);
-                    setProfile(null);
+
+                if (mounted) {
+                    if (session?.user) {
+                        setUser(session.user);
+                        await fetchProfile(session.user.id);
+                    } else {
+                        setUser(null);
+                        setProfile(null);
+                    }
                     setLoading(false);
                 }
             } catch (error) {
-                console.error('Erro na inicialização:', error);
-                setLoading(false);
+                console.error('Init error:', error);
+                if (mounted) setLoading(false);
             }
         };
 
         initialize();
 
-        // 2. Auth State Listener
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-            console.log('Auth Event:', event);
+            console.log('Auth State Change:', event);
             if (session?.user) {
                 setUser(session.user);
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
                     await fetchProfile(session.user.id);
                 }
-            } else {
+            } else if (event === 'SIGNED_OUT') {
                 setUser(null);
                 setProfile(null);
                 setLoading(false);
             }
         });
 
-        const timeout = setTimeout(() => setLoading(false), 8000);
-
         return () => {
+            mounted = false;
             subscription.unsubscribe();
-            clearTimeout(timeout);
         };
     }, []);
 
-    // 3. Real-time Profile Updates
+    // Realtime changes
     useEffect(() => {
         if (!user?.id) return;
 
-        console.log('Iniciando Realtime para:', user.id);
         const channel = supabase
-            .channel(`profile-updates-${user.id}`)
-            .on(
-                'postgres_changes',
-                {
-                    event: 'UPDATE',
-                    schema: 'public',
-                    table: 'profiles',
-                    filter: `id=eq.${user.id}`
-                },
-                (payload) => {
-                    console.log('Realtime Update:', payload.new);
-                    setProfile(payload.new);
-                }
-            )
-            .subscribe((status) => {
-                console.log('Realtime Status:', status);
-            });
+            .channel(`profile-${user.id}`)
+            .on('postgres_changes', {
+                event: 'UPDATE',
+                schema: 'public',
+                table: 'profiles',
+                filter: `id=eq.${user.id}`
+            }, (payload) => {
+                console.log('Realtime Update:', payload.new);
+                setProfile(payload.new);
+            })
+            .subscribe();
 
         return () => {
             supabase.removeChannel(channel);
@@ -113,17 +102,23 @@ export const AuthProvider = ({ children }) => {
         signUp: (data) => supabase.auth.signUp(data),
         signIn: (data) => supabase.auth.signInWithPassword(data),
         signOut: async () => {
-            console.log('Saindo...');
-            await supabase.auth.signOut();
-            setUser(null);
-            setProfile(null);
-            setLoading(false);
+            try {
+                await supabase.auth.signOut();
+            } catch (e) {
+                console.error('Error signing out:', e);
+            } finally {
+                setUser(null);
+                setProfile(null);
+                setLoading(false);
+            }
         },
         refreshProfile: () => user && fetchProfile(user.id),
         user,
         profile,
-        isPremium: !!profile?.is_premium,
-        loading: loading && !profile, // Only block if we are truly loading AND have no profile yet
+        // Simplificado: se tem perfil e is_premium é true.
+        isPremium: !!(profile && profile.is_premium === true),
+        // Loading só bloqueia se não temos certeza do estado do usuário
+        loading: loading,
     };
 
     return (
