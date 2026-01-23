@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Heart, Shield, Bell, Smartphone, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Heart, Shield, Bell, Smartphone, ArrowRight, CheckCircle2, CreditCard, Mail, UserCheck } from 'lucide-react';
 import Logo from '../components/Logo';
 
 const LandingPage = () => {
@@ -127,6 +127,45 @@ const LandingPage = () => {
                 </div>
             </section>
 
+            {/* How it works / Activation redesigned */}
+            <section style={{ padding: '6rem 1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
+                <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                    <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Como funciona o Acesso Premium?</h2>
+                    <p style={{ color: 'var(--text-secondary)' }}>Ativação automática baseada no seu e-mail de compra.</p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                    <FeatureCard
+                        icon={<CreditCard size={32} />}
+                        title="1. Pagamento Seguro"
+                        desc="Você realiza o pagamento único através da nossa parceira Kiwify de forma 100% segura."
+                    />
+                    <FeatureCard
+                        icon={<Mail size={32} />}
+                        title="2. E-mail de Compra"
+                        desc="A Kiwify confirmará a compra no seu e-mail. **Use este mesmo e-mail para criar sua conta.**"
+                    />
+                    <FeatureCard
+                        icon={<UserCheck size={32} />}
+                        title="3. Ativação Instantânea"
+                        desc="Ao entrar no Cuidar+ com o e-mail da compra, o Premium é liberado na hora automaticamente."
+                    />
+                </div>
+
+                <div style={{
+                    marginTop: '2.5rem',
+                    padding: '1.25rem 2rem',
+                    background: '#FFFBEB',
+                    borderRadius: '24px',
+                    border: '1px solid #FDE68A',
+                    color: '#92400E',
+                    fontSize: '1rem',
+                    textAlign: 'center'
+                }}>
+                    <strong>💡 Dica:</strong> Já tem uma conta gratuita? Use o mesmo e-mail na compra e seu acesso Premium será ativado na próxima vez que abrir o app.
+                </div>
+            </section>
+
             {/* Social Proof / Pricing */}
             <section id="pricing" style={{ padding: '6rem 1.5rem', background: '#111827', color: 'white', borderRadius: '40px', margin: '0 1.5rem 4rem' }}>
                 <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
@@ -159,7 +198,7 @@ const LandingPage = () => {
                     <ul style={{ textAlign: 'left', display: 'inline-block', marginBottom: '3rem', listStyle: 'none', padding: 0 }}>
                         <ListItem text="Controle de Medicamentos ilimitado" />
                         <ListItem text="Gráficos de Pressão e Diabetes" />
-                        <ListItem text="Instalação PWA no celular" />
+                        <ListItem text="Relatórios em PDF e WhatsApp" />
                         <ListItem text="Suporte prioritário" />
                     </ul>
 
@@ -170,50 +209,6 @@ const LandingPage = () => {
                     >
                         Sim! Quero mais saúde e tranquilidade
                     </button>
-                </div>
-            </section>
-
-            {/* How it works / Activation */}
-            <section style={{ padding: '4rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
-                <div style={{
-                    padding: '3rem',
-                    borderRadius: '32px',
-                    background: '#F3F4F6',
-                    border: '1px solid #E5E7EB'
-                }}>
-                    <h3 style={{ fontSize: '1.75rem', marginBottom: '2rem', textAlign: 'center' }}>
-                        Como funciona o Acesso Premium?
-                    </h3>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        <StepItem
-                            number="1"
-                            title="Pagamento Seguro"
-                            desc="Você realiza o pagamento único através da nossa parceira Kiwify."
-                        />
-                        <StepItem
-                            number="2"
-                            title="E-mail de Confirmação"
-                            desc="A Kiwify enviará uma confirmação para o seu e-mail. **Atenção:** Guarde qual e-mail você usou na compra!"
-                        />
-                        <StepItem
-                            number="3"
-                            title="Ativação Automática"
-                            desc="Ao criar sua conta no Cuidar+ usando o **mesmo e-mail** da compra, seu acesso Premium será liberado instantaneamente."
-                        />
-                    </div>
-
-                    <div style={{
-                        marginTop: '2.5rem',
-                        padding: '1rem',
-                        background: '#FFFBEB',
-                        borderRadius: '12px',
-                        border: '1px solid #FDE68A',
-                        color: '#92400E',
-                        fontSize: '0.875rem'
-                    }}>
-                        <strong>💡 Dica:</strong> Já tem uma conta gratuita? Sem problemas. Use o mesmo e-mail no checkout da Kiwify e seu perfil será atualizado automaticamente para Premium logo após o pagamento.
-                    </div>
                 </div>
             </section>
 
@@ -239,29 +234,6 @@ const ListItem = ({ text }) => (
         <CheckCircle2 color="#10B981" />
         {text}
     </li>
-);
-
-const StepItem = ({ number, title, desc }) => (
-    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
-        <div style={{
-            minWidth: '40px',
-            height: '40px',
-            background: 'var(--primary-color)',
-            color: 'white',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '1.25rem'
-        }}>
-            {number}
-        </div>
-        <div>
-            <h4 style={{ fontSize: '1.125rem', marginBottom: '0.5rem' }}>{title}</h4>
-            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '1rem' }} dangerouslySetInnerHTML={{ __html: desc.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></p>
-        </div>
-    </div>
 );
 
 export default LandingPage;
