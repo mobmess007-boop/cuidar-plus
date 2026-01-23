@@ -11,6 +11,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <title>Cuidar+</title>
+  <script>
+    // Proteção básica contra inspeção
+    document.addEventListener('contextmenu', event => event.preventDefault()); // Bloqueia clique direito
+    document.onkeydown = function(e) {
+      if (e.keyCode == 123) return false; // Bloqueia F12
+      if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0))) return false; // Bloqueia Ctrl+Shift+I/J/C
+      if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Bloqueia Ctrl+U (Ver código fonte)
+    };
+  </script>
 </head>
 
 <body>
