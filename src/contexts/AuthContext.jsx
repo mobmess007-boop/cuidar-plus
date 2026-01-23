@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
                 // Isso garante que o status premium seja carregado ao reabrir a página
                 await fetchProfile(session.user.id);
                 setLoading(false);
-            } else if (event === 'SIGNED_OUT') {
+            } else {
                 setUser(null);
                 setProfile(null);
                 setLoading(false);
