@@ -10,11 +10,13 @@ export const AuthProvider = ({ children }) => {
 
     const fetchProfile = async (userId) => {
         if (!userId) {
+            console.log('[Auth] No userId provided to fetchProfile');
             setProfile(null);
             return null;
         }
 
         try {
+            console.log(`[Auth] Fetching profile for: ${userId}`);
             const { data, error } = await supabase
                 .from('profiles')
                 .select('*')
@@ -23,16 +25,19 @@ export const AuthProvider = ({ children }) => {
 
             if (error) {
                 if (error.code !== 'PGRST116') {
-                    console.error('Error fetching profile:', error);
+                    console.error('[Auth] Error fetching profile:', error);
+                } else {
+                    console.log('[Auth] Profile not found (PGRST116)');
                 }
                 setProfile(null);
                 return null;
             }
 
+            console.log('[Auth] Profile loaded successfully:', data.is_premium ? 'PREMIUM' : 'FREE');
             setProfile(data);
             return data;
         } catch (err) {
-            console.error('Unexpected error fetching profile:', err);
+            console.error('[Auth] Unexpected error in fetchProfile:', err);
             setProfile(null);
             return null;
         }
@@ -41,35 +46,17 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         let mounted = true;
 
-        const initializeAuth = async () => {
-            try {
-                // 1. Get initial session
-                const { data: { session } } = await supabase.auth.getSession();
-                
-                if (mounted) {
-                    if (session?.user) {
-                        setUser(session.user);
-                        // 2. Fetch profile immediately if session exists
-                        await fetchProfile(session.user.id);
-                    } else {
-                        setUser(null);
-                        setProfile(null);
-                    }
-                }
-            } catch (error) {
-                console.error('Initialization error:', error);
-            } finally {
-                // 3. ALWAYS set loading to false after first check
-                if (mounted) setLoading(false);
+        // Fail-safe: nunca deixar o app em loading infinito
+        const failSafeTimeout = setTimeout(() => {
+            if (mounted && loading) {
+                console.warn('[Auth] Fail-safe timeout reached. Forcing loading to false.');
+                setLoading(false);
             }
-        };
+        }, 8000); // 8 segundos de limite
 
-        initializeAuth();
+        const handleAuthStateChange = async (event, session) => {
+            console.log(`[Auth] State Change: ${event}`, session?.user?.id || 'No User');
 
-        // Listen for changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-            console.log('Auth State Change Event:', event);
-            
             if (session?.user) {
                 setUser(session.user);
                 await fetchProfile(session.user.id);
@@ -77,17 +64,46 @@ export const AuthProvider = ({ children }) => {
                 setUser(null);
                 setProfile(null);
             }
-            
-            if (mounted) setLoading(false);
+
+            if (mounted) {
+                setLoading(false);
+                clearTimeout(failSafeTimeout);
+            }
+        };
+
+        // Unificado: getSession inicial + listener
+        const initializeAuth = async () => {
+            try {
+                console.log('[Auth] Initializing session...');
+                const { data: { session }, error } = await supabase.auth.getSession();
+
+                if (error) console.error('[Auth] getSession error:', error);
+
+                if (mounted) {
+                    await handleAuthStateChange('INITIAL_SESSION', session);
+                }
+            } catch (error) {
+                console.error('[Auth] Initialization error:', error);
+                if (mounted) setLoading(false);
+            }
+        };
+
+        initializeAuth();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            // Se for INITIAL_SESSION e já processamos no initializeAuth, podemos ignorar aqui 
+            // ou processar novamente para garantir sincronia.
+            handleAuthStateChange(event, session);
         });
 
         return () => {
             mounted = false;
             subscription.unsubscribe();
+            clearTimeout(failSafeTimeout);
         };
     }, []);
 
-    // Real-time profile updates (optional, but good for UX)
+    // Real-time profile updates
     useEffect(() => {
         if (!user?.id) return;
 
@@ -99,7 +115,7 @@ export const AuthProvider = ({ children }) => {
                 table: 'profiles',
                 filter: `id=eq.${user.id}`
             }, (payload) => {
-                console.log('Real-time profile update received:', payload.new);
+                console.log('[Auth] Real-time profile update:', payload.new.is_premium);
                 setProfile(payload.new);
             })
             .subscribe();
