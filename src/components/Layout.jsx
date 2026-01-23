@@ -3,11 +3,11 @@ import Header from './Header';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const Layout = ({ children, title, showBack = false }) => {
+const Layout = ({ children, title, showBack = false, className = "" }) => {
     const navigate = useNavigate();
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div className={className} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header title="Cuidar+" />
 
             {showBack && (
