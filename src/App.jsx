@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
+import PremiumRoute from './components/PremiumRoute';
 import Dashboard from './pages/Dashboard';
 import Medicamentos from './pages/Medicamentos/index';
 import AdicionarMedicamento from './pages/Medicamentos/Adicionar';
@@ -25,8 +26,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/sucesso" element={<Success />} />
 
-          {/* Protected Routes */}
-          <Route element={<PrivateRoute />}>
+          {/* Premium Protected Routes */}
+          <Route element={<PremiumRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/medicamentos" element={<Medicamentos />} />
             <Route path="/medicamentos/adicionar" element={<AdicionarMedicamento />} />

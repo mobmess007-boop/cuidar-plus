@@ -50,29 +50,17 @@ const Medicamentos = () => {
             <div style={{ marginBottom: '1.5rem' }}>
                 <button
                     className="btn-primary"
-                    onClick={() => {
-                        if (!isPremium && meds.length >= 3) {
-                            alert('Limite da versão gratuita atingido (3 medicamentos). Faça o upgrade para Premium para cadastrar quantos quiser!');
-                            return;
-                        }
-                        navigate('/medicamentos/adicionar');
-                    }}
+                    onClick={() => navigate('/medicamentos/adicionar')}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '0.5rem',
-                        opacity: (!isPremium && meds.length >= 3) ? 0.7 : 1
+                        gap: '0.5rem'
                     }}
                 >
                     <Plus size={20} />
                     Novo Medicamento
                 </button>
-                {!isPremium && meds.length >= 3 && (
-                    <p style={{ color: 'var(--secondary-color)', fontSize: '0.875rem', marginTop: '0.5rem', fontWeight: '500' }}>
-                        Limite de 3 medicamentos atingido na versão gratuita.
-                    </p>
-                )}
             </div>
 
             {loading ? (

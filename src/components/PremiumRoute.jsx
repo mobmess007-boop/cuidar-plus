@@ -2,9 +2,11 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-const PrivateRoute = () => {
-    const { user, loading } = useAuth();
+const PremiumRoute = () => {
+    const { user, isPremium, loading } = useAuth();
 
+    // 🧩 PADRÃO DE RENDER (OBRIGATÓRIO)
+    // 1. if (loading) mostrar loading
     if (loading) {
         return (
             <div style={{
@@ -34,7 +36,18 @@ const PrivateRoute = () => {
         );
     }
 
-    return user ? <Outlet /> : <Navigate to="/login" replace />;
+    // 2. if (!user) redirecionar para /login
+    if (!user) {
+        return <Navigate to="/login" replace />;
+    }
+
+    // 3. if (!premium) redirecionar para /upgrade (usando / como fallback)
+    if (!isPremium) {
+        return <Navigate to="/" replace />;
+    }
+
+    // 4. senão renderizar conteúdo (dashboard/etc)
+    return <Outlet />;
 };
 
-export default PrivateRoute;
+export default PremiumRoute;

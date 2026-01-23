@@ -47,65 +47,25 @@ const Pressao = () => {
             <div style={{ marginBottom: '1.5rem' }}>
                 <button
                     className="btn-primary"
-                    onClick={() => {
-                        if (!isPremium && logs.length >= 5) {
-                            alert('Limite da versão gratuita atingido (5 registros). Faça o upgrade para Premium para adicionar medições ilimitadas!');
-                            return;
-                        }
-                        navigate('/pressao/adicionar');
-                    }}
+                    onClick={() => navigate('/pressao/adicionar')}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '0.5rem',
-                        opacity: (!isPremium && logs.length >= 5) ? 0.7 : 1
+                        gap: '0.5rem'
                     }}
                 >
                     <Plus size={20} />
                     Nova Medição
                 </button>
-                {!isPremium && logs.length >= 5 && (
-                    <p style={{ color: 'var(--secondary-color)', fontSize: '0.875rem', marginTop: '0.5rem', fontWeight: '500' }}>
-                        Limite de 5 registros atingido na versão gratuita.
-                    </p>
-                )}
             </div>
 
             {/* Chart Section */}
             {logs.length > 0 && (
                 <div className="card">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h3 style={{ margin: 0, fontSize: '1.125rem' }}>Evolução</h3>
-                        {!isPremium && (
-                            <span style={{ fontSize: '0.75rem', background: 'var(--primary-color)', color: 'white', padding: '2px 8px', borderRadius: '12px', fontWeight: 'bold' }}>
-                                PREMIUM
-                            </span>
-                        )}
+                    <div style={{ height: '300px', width: '100%' }}>
+                        <BPChart data={logs} />
                     </div>
-                    {isPremium ? (
-                        <div style={{ height: '300px', width: '100%' }}>
-                            <BPChart data={logs} />
-                        </div>
-                    ) : (
-                        <div style={{
-                            height: '200px',
-                            width: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            background: '#F3F4F6',
-                            borderRadius: '12px',
-                            textAlign: 'center',
-                            padding: '1rem'
-                        }}>
-                            <Activity size={32} style={{ color: 'var(--text-light)', marginBottom: '0.5rem', opacity: 0.5 }} />
-                            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', margin: 0 }}>
-                                Gráficos de evolução estão disponíveis apenas na <strong>Versão Premium</strong>.
-                            </p>
-                        </div>
-                    )}
                 </div>
             )}
 
