@@ -60,9 +60,10 @@ export const AuthProvider = ({ children }) => {
             console.log('Auth State Change:', event);
             if (session?.user) {
                 setUser(session.user);
-                if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-                    await fetchProfile(session.user.id);
-                }
+                // SEMPRE buscar o perfil quando há usuário, independente do evento
+                // Isso garante que o status premium seja carregado ao reabrir a página
+                await fetchProfile(session.user.id);
+                setLoading(false);
             } else if (event === 'SIGNED_OUT') {
                 setUser(null);
                 setProfile(null);
