@@ -173,6 +173,50 @@ const LandingPage = () => {
                 </div>
             </section>
 
+            {/* How it works / Activation */}
+            <section style={{ padding: '4rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
+                <div style={{
+                    padding: '3rem',
+                    borderRadius: '32px',
+                    background: '#F3F4F6',
+                    border: '1px solid #E5E7EB'
+                }}>
+                    <h3 style={{ fontSize: '1.75rem', marginBottom: '2rem', textAlign: 'center' }}>
+                        Como funciona o Acesso Premium?
+                    </h3>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                        <StepItem
+                            number="1"
+                            title="Pagamento Seguro"
+                            desc="Você realiza o pagamento único através da nossa parceira Kiwify."
+                        />
+                        <StepItem
+                            number="2"
+                            title="E-mail de Confirmação"
+                            desc="A Kiwify enviará uma confirmação para o seu e-mail. **Atenção:** Guarde qual e-mail você usou na compra!"
+                        />
+                        <StepItem
+                            number="3"
+                            title="Ativação Automática"
+                            desc="Ao criar sua conta no Cuidar+ usando o **mesmo e-mail** da compra, seu acesso Premium será liberado instantaneamente."
+                        />
+                    </div>
+
+                    <div style={{
+                        marginTop: '2.5rem',
+                        padding: '1rem',
+                        background: '#FFFBEB',
+                        borderRadius: '12px',
+                        border: '1px solid #FDE68A',
+                        color: '#92400E',
+                        fontSize: '0.875rem'
+                    }}>
+                        <strong>💡 Dica:</strong> Já tem uma conta gratuita? Sem problemas. Use o mesmo e-mail no checkout da Kiwify e seu perfil será atualizado automaticamente para Premium logo após o pagamento.
+                    </div>
+                </div>
+            </section>
+
             {/* Footer */}
             <footer style={{ padding: '4rem 1.5rem', borderTop: '1px solid #E5E7EB', textAlign: 'center' }}>
                 <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--primary-color)', marginBottom: '1rem' }}>Cuidar+</div>
@@ -195,6 +239,29 @@ const ListItem = ({ text }) => (
         <CheckCircle2 color="#10B981" />
         {text}
     </li>
+);
+
+const StepItem = ({ number, title, desc }) => (
+    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+        <div style={{
+            minWidth: '40px',
+            height: '40px',
+            background: 'var(--primary-color)',
+            color: 'white',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            fontSize: '1.25rem'
+        }}>
+            {number}
+        </div>
+        <div>
+            <h4 style={{ fontSize: '1.125rem', marginBottom: '0.5rem' }}>{title}</h4>
+            <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '1rem' }} dangerouslySetInnerHTML={{ __html: desc.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }}></p>
+        </div>
+    </div>
 );
 
 export default LandingPage;
