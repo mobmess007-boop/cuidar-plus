@@ -12,7 +12,11 @@ const AdicionarDiabetes = () => {
         level: '',
         context: '',
         notes: '',
-        measured_at: new Date().toISOString().slice(0, 16)
+        measured_at: (() => {
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            return now.toISOString().slice(0, 16);
+        })()
     });
 
     const handleChange = (e) => {
